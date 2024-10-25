@@ -5,6 +5,13 @@
     name: nfs-common
     state: present
 
+- name: Ensure each mount point directory exists
+  become: true
+  file:
+    path: "{{ item.path }}"
+    state: directory
+  with_items: "{{ nfs_share_mounts }}"
+  
 - name: Mount NFS share
   become: true
   ansible.posix.mount:
