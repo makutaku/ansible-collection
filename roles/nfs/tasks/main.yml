@@ -5,11 +5,14 @@
     name: nfs-common
     state: present
 
-- name: Ensure each mount point directory exists
+- name: Ensure each mount point directory exists with correct ownership
   become: true
   file:
     path: "{{ item.path }}"
     state: directory
+    owner: "{{ nfs_owner | default('root') }}"
+    group: "{{ nfs_group | default('root') }}"
+    mode: '0755'
   with_items: "{{ nfs_share_mounts }}"
   
 - name: Mount NFS share
